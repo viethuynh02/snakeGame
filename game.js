@@ -21,7 +21,7 @@ var snakeBody = [];
 var score = 0;
 document.getElementById('score').innerHTML = score;
 
-window.onload = function() {
+window.onload = function start() {
     board = document.getElementById("board");
     board.height = rows * blockSize;
     board.width = cols * blockSize;
@@ -29,13 +29,11 @@ window.onload = function() {
 
     placeApple ();
     document.addEventListener('keyup', changeDrection);
-    const snakeInterval = setInterval(update, 100);
+    setInterval(update, 100);
 }
 
 
 function update() {
-    
-
     context.fillStyle="black";
     context.fillRect(0, 0, board.width, board.height);
 
@@ -58,13 +56,14 @@ function update() {
     }
 
     //game over
-    if (snakeX < 0 || snakeX > 20 * blockSize || snakeY < 0 || snakeY > 20 * blockSize){
+    if (snakeX < 0 || snakeX == 20 * blockSize || snakeY < 0 || snakeY == 20 * blockSize){
         alert ("Game over");
-        clearInterval(snakeInterval);
+        resetGame ();
     }
     for (i = 1; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
             alert ("Game over");
+            resetGame ();
         }
     }
 }
@@ -101,6 +100,18 @@ function changeDrection(e) {
         velocityX = -1;
         velocityY = 0;
     }
-
 }
 
+function resetGame (){
+    //snake
+    snakeX = 3 * blockSize;
+    snakeY = 3 * blockSize;
+
+    velocityX = 0;
+    velocityY = 0;
+
+    snakeBody = [];
+
+    score = 0;
+    document.getElementById('score').innerHTML = score;
+}
