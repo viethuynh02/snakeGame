@@ -24,17 +24,21 @@ document.getElementById('score').innerHTML = score;
 let speed = 10;
 let appleScore = 1;
 
+
+//walls
+let wall1 = [];
+let wall2 = [];
+
+let myInterval = setInterval(update, 1000/speed);
 window.onload = function start() {
     board = document.getElementById("board");
     board.height = rows * blockSize;
     board.width = cols * blockSize;
     context = board.getContext("2d"); 
 
-    let myInterval = setInterval(update, 1000/speed);
     level();
-    placeApple ();
     document.addEventListener('keyup', changeDrection);
-    
+    placeApple ();
 }
 
 
@@ -60,6 +64,15 @@ function update() {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
     }
 
+    //draw walls
+    context.fillStyle = "bisque";
+    for (let i = 0; i < 11; i++){
+        wall1.push([7 * blockSize, i * blockSize])
+        wall2.push([14 * blockSize, (16 - i) * blockSize])
+        context.fillRect(wall1 [i][0], wall1 [i][1], blockSize, blockSize);
+        context.fillRect(wall2 [i][0], wall2 [i][1], blockSize, blockSize);
+    }
+
     //game over
     if (snakeX < 0 || snakeX == 25 * blockSize || snakeY < 0 || snakeY == 17 * blockSize){
         alert ("Game over");
@@ -67,6 +80,16 @@ function update() {
     }
     for (i = 1; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
+            alert ("Game over");
+            resetGame ();
+        }
+    }
+    for (let i = 0; i < 11; i++){
+        if (snakeX == wall1[i][0] && snakeY == wall1[i][1]){
+            alert ("Game over");
+            resetGame ();
+        }
+        if (snakeX == wall2[i][0] && snakeY == wall2[i][1]){
             alert ("Game over");
             resetGame ();
         }
@@ -84,8 +107,20 @@ function snakeEat() {
 
 //random place apple
 function placeApple() {
-    appleX = Math.floor(Math.random() * cols) * blockSize;
-    appleY = Math.floor(Math.random() * rows) * blockSize;  
+    let a = false;
+    do {
+        a = false;
+        appleX = Math.floor(Math.random() * cols) * blockSize;
+        appleY = Math.floor(Math.random() * rows) * blockSize;  
+        for (let i = 0; i < 11; i++){
+            if (appleX == wall1[i][0] && appleY == wall1[i][1]){
+                a = true;         
+            }
+            if (appleX == wall2[i][0] && appleX== wall2[i][1]){
+                a = true;
+            }
+        }
+    } while (a)
 }
 
 function changeDrection(e) {
@@ -130,30 +165,27 @@ function level () {
         element2.addEventListener("click", levelNormal);
     const element3 = document.getElementById("levelHard");
         element3.addEventListener("click", levelHard);
+}
+function levelEasy (){
+    speed = 1;
+    appleScore = 1;
+    console.log(speed);
+    clearInterval(myInterval)
+    let myInterval = setInterval(update, 1000/speed);
+}
 
-        
+function levelNormal (){
+    speed = 10;
+    appleScore = 5;
+    console.log(speed);
+    clearInterval(myInterval)
+    let myInterval = setInterval(update, 1000/speed);
+}
 
-        function levelEasy (){
-            speed = 1;
-            appleScore = 1;
-            console.log(speed);
-            clearInterval(myInterval)
-            let myInterval = setInterval(update, 1000/speed);
-        }
-        
-        function levelNormal (){
-            speed = 10;
-            appleScore = 5;
-            console.log(speed);
-            clearInterval(myInterval)
-            let myInterval = setInterval(update, 1000/speed);
-        }
-        
-        function levelHard (){
-            speed = 60;
-            appleScore = 10;
-            console.log(speed);
-            clearInterval(myInterval)
-            let myInterval = setInterval(update, 1000/speed);
-        }
+function levelHard (){
+    speed = 60;
+    appleScore = 10;
+    console.log(speed);
+    clearInterval(myInterval)
+    let myInterval = setInterval(update, 1000/speed);
 }
