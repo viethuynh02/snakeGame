@@ -1,7 +1,7 @@
 //board
 var blockSize = 25;
-var rows = 20;
-var cols = 20;
+var rows = 17;
+var cols = 25;
 var board;
 var context;
 
@@ -21,15 +21,20 @@ var snakeBody = [];
 var score = 0;
 document.getElementById('score').innerHTML = score;
 
+let speed = 10;
+let appleScore = 1;
+
 window.onload = function start() {
     board = document.getElementById("board");
     board.height = rows * blockSize;
     board.width = cols * blockSize;
     context = board.getContext("2d"); 
 
+    let myInterval = setInterval(update, 1000/speed);
+    level();
     placeApple ();
     document.addEventListener('keyup', changeDrection);
-    setInterval(update, 100);
+    
 }
 
 
@@ -56,7 +61,7 @@ function update() {
     }
 
     //game over
-    if (snakeX < 0 || snakeX == 20 * blockSize || snakeY < 0 || snakeY == 20 * blockSize){
+    if (snakeX < 0 || snakeX == 25 * blockSize || snakeY < 0 || snakeY == 17 * blockSize){
         alert ("Game over");
         resetGame ();
     }
@@ -72,7 +77,7 @@ function snakeEat() {
     if (snakeX == appleX && snakeY == appleY){
         snakeBody.push([appleX, appleY]);
         placeApple();
-        score ++;
+        score += appleScore;
         document.getElementById('score').innerHTML = score;
     }
 }
@@ -114,4 +119,41 @@ function resetGame (){
 
     score = 0;
     document.getElementById('score').innerHTML = score;
+}
+
+
+
+function level () {
+    const element1 = document.getElementById("levelEasy");
+        element1.addEventListener("click", levelEasy);
+    const element2 = document.getElementById("levelNormal");
+        element2.addEventListener("click", levelNormal);
+    const element3 = document.getElementById("levelHard");
+        element3.addEventListener("click", levelHard);
+
+        
+
+        function levelEasy (){
+            speed = 1;
+            appleScore = 1;
+            console.log(speed);
+            clearInterval(myInterval)
+            let myInterval = setInterval(update, 1000/speed);
+        }
+        
+        function levelNormal (){
+            speed = 10;
+            appleScore = 5;
+            console.log(speed);
+            clearInterval(myInterval)
+            let myInterval = setInterval(update, 1000/speed);
+        }
+        
+        function levelHard (){
+            speed = 60;
+            appleScore = 10;
+            console.log(speed);
+            clearInterval(myInterval)
+            let myInterval = setInterval(update, 1000/speed);
+        }
 }
