@@ -21,16 +21,27 @@ var snakeBody = [];
 var score = 0;
 document.getElementById('score').innerHTML = score;
 
-let speed = 10;
-let appleScore = 1;
+let speed = 6;
+let appleScore = 5;
 
 
 //walls
 let wall1 = [];
 let wall2 = [];
+for (let i = 0; i < 11; i++){
+    wall1.push([7 * blockSize, i * blockSize])
+    wall2.push([14 * blockSize, (16 - i) * blockSize])
+}
+
+//player
+let playerName;
+let playerScore;
+let playerNumber = 0;
+let player = [];
+let content = "";
+
 
 let myInterval = setInterval(update, 1000/speed);
-window.onload = function start() {
     board = document.getElementById("board");
     board.height = rows * blockSize;
     board.width = cols * blockSize;
@@ -39,7 +50,6 @@ window.onload = function start() {
     level();
     document.addEventListener('keyup', changeDrection);
     placeApple ();
-}
 
 
 function update() {
@@ -67,35 +77,63 @@ function update() {
     //draw walls
     context.fillStyle = "bisque";
     for (let i = 0; i < 11; i++){
-        wall1.push([7 * blockSize, i * blockSize])
-        wall2.push([14 * blockSize, (16 - i) * blockSize])
         context.fillRect(wall1 [i][0], wall1 [i][1], blockSize, blockSize);
         context.fillRect(wall2 [i][0], wall2 [i][1], blockSize, blockSize);
     }
 
     //game over
     if (snakeX < 0 || snakeX == 25 * blockSize || snakeY < 0 || snakeY == 17 * blockSize){
-        alert ("Game over");
-        resetGame ();
+        gameOver ();
     }
     for (i = 1; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
-            alert ("Game over");
-            resetGame ();
+            gameOver ();
         }
     }
     for (let i = 0; i < 11; i++){
         if (snakeX == wall1[i][0] && snakeY == wall1[i][1]){
-            alert ("Game over");
-            resetGame ();
+            gameOver ();
         }
         if (snakeX == wall2[i][0] && snakeY == wall2[i][1]){
-            alert ("Game over");
-            resetGame ();
+            gameOver ();
+        }
+    }
+
+    
+}
+
+function gameOver (){
+    alert ("Game over");
+    playerName = prompt("Enter your name");
+    playerScore = score;
+    player[playerNumber] = new Player(playerName, playerScore);
+    ranking();
+    content = "";
+    for (let i = 0; i < player.length; i++){
+        content += `<tr>
+                        <td>${i+1}:</td>
+                        <td>${player[i].playerName}</td>
+                        <td>${player[i].playerScore}</td>
+                    </tr>`;
+    }
+    document.getElementById("playerScore").innerHTML = content;
+    playerNumber++;
+    resetGame ();
+}
+
+function ranking (){
+    for (let i = player.length - 1; i > 0; i--){
+        let j = i - 1;
+        let a = player[i].playerScore;
+        let b = player[j].playerScore;
+        if (a > b){
+            let a;
+            a = player[i]; 
+            player[i] = player[j];
+            player[j] = a;
         }
     }
 }
-
 function snakeEat() {
     if (snakeX == appleX && snakeY == appleY){
         snakeBody.push([appleX, appleY]);
@@ -171,21 +209,21 @@ function levelEasy (){
     appleScore = 1;
     console.log(speed);
     clearInterval(myInterval)
-    let myInterval = setInterval(update, 1000/speed);
+    myInterval = setInterval(update, 1000/speed);
 }
 
 function levelNormal (){
-    speed = 10;
+    speed = 6;
     appleScore = 5;
     console.log(speed);
     clearInterval(myInterval)
-    let myInterval = setInterval(update, 1000/speed);
+    myInterval = setInterval(update, 1000/speed);
 }
 
 function levelHard (){
-    speed = 60;
+    speed = 12;
     appleScore = 10;
     console.log(speed);
     clearInterval(myInterval)
-    let myInterval = setInterval(update, 1000/speed);
+    myInterval = setInterval(update, 1000/speed);
 }

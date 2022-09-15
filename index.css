@@ -1,7 +1,59 @@
 body {
     text-align: center;
     margin: 0;
+    background-color: rgb(225, 247, 239);
 }
 #score {
     display: inline;
+}
+
+#board {
+    float: right;
+    margin-right: 25%;
+    width: 50%;
+}
+
+table {
+    width: 100%;
+    background-color: #4CAF50;
+}
+
+tr {
+    margin-bottom: 2px;
+}
+td {
+    border-bottom: 2px solid rgb(255, 255, 255);
+    font-size: 15px;
+    color: rgb(255, 255, 255);
+}
+
+#rank {
+    border-top: 1px solid rgb(67, 69, 71);
+}
+
+#level {
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 50px;
+}
+
+#mySidebar {
+    background-color: rgb(255, 255, 255);
+    color: #348b37;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+button:hover {
+    background-color: #98da9b; /* Green */
 }
